@@ -52,10 +52,9 @@ ifeq ($(STATIC),1)
 LDFLAGS+=-static
 endif
 
-#FPIC=-fPIC
+FPIC=-fPIC
 
-all: tb64app 
-#libtb64.so
+all: libtb64.so
 
 ifeq ($(NCHECK),1)
 DEFS+=-DNB64CHECK
@@ -103,14 +102,9 @@ DEFS+=-DUSE_AVX512
 LIB+=turbob64avx512.o
 endif
 
-#_tb64.so: _tb64.o
-#	gcc -shared $^ -o $@
-
 libtb64.so: $(LIB)
 	gcc -shared $^ -o $@
-	cp libtb64.so ~/.local/lib/
-	./python/tb64/build.py
-	cp _tb64.so ~/.local/lib/
+	# cp libtb64.so ~/.local/lib/
 
 tb64app: $(LIB) tb64app.o 
 	$(CC) -O3 $(LIB) tb64app.o $(LDFLAGS) -o tb64app
@@ -130,4 +124,3 @@ clean:
 
 cleanw:
 	del /S *.o
-
